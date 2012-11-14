@@ -69,10 +69,12 @@ define nginx::resource::location(
     fail('Cannot define both directory and proxy in a virtual host')
   }
 
-  ## Create stubs for vHost File Fragment Pattern
-  file {"${nginx::config::nx_temp_dir}/nginx.d/${vhost}-500-${name}":
-    ensure  => $ensure_real,
-    content => $content_real,
+  ## Create stubs for vHost File Fragment Pattern if non-SSL locations are enabled
+  if ($force_ssl == false) {
+    file {"${nginx::config::nx_temp_dir}/nginx.d/${vhost}-500-${name}":
+      ensure  => $ensure_real,
+      content => $content_real,
+    }
   }
 
   ## Only create SSL Specific locations if $ssl is true.

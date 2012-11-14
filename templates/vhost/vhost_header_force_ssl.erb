@@ -1,0 +1,6 @@
+  if ($request_method ~* "GET|HEAD") {
+    rewrite ^(.*) https://$server_name$1 permanent;
+    break;
+  }
+
+  return 426 "HTTPS Required";
