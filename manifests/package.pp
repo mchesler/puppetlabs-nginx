@@ -17,20 +17,20 @@ class nginx::package {
   anchor { 'nginx::package::begin': }
   anchor { 'nginx::package::end': }
 
-  case $::operatingsystem {
-    centos,fedora,rhel,scientific: {
+  case $::osfamily {
+    redhat: {
       class { 'nginx::package::redhat':
         require => Anchor['nginx::package::begin'],
         before  => Anchor['nginx::package::end'],
       }
     }
-    debian,ubuntu: {
+    debian: {
       class { 'nginx::package::debian': 
         require => Anchor['nginx::package::begin'],
         before  => Anchor['nginx::package::end'],
       }
     }
-    opensuse,suse: {
+    suse: {
       class { 'nginx::package::suse':
         require => Anchor['nginx::package::begin'],
         before  => Anchor['nginx::package::end'],
