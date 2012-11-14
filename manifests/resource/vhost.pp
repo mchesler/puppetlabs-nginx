@@ -60,6 +60,12 @@ define nginx::resource::vhost(
     mode  => '0644',
   }
 
+  ## Shared Variables
+  $ensure_real = $ensure ? {
+    'absent' => absent,
+    default  => file,
+  }
+
   # Add IPv6 Logic Check - Nginx service will not start if ipv6 is enabled
   # and support does not exist for it in the kernel.
   if ($ipv6_enable == 'true') and ($ipaddress6)  {
@@ -76,10 +82,7 @@ define nginx::resource::vhost(
   # Use the File Fragment Pattern to construct the configuration files.
   # Create the base configuration file reference.
   file { "${nginx::config::nx_temp_dir}/nginx.d/${name}-001":
-    ensure  => $ensure ? {
-      'absent' => absent,
-      default  => 'file',
-    },
+    ensure  => $ensure_real,
     content => template('nginx/vhost/vhost_header.erb'),
     notify => Class['nginx::service'],
   }
@@ -108,10 +111,7 @@ define nginx::resource::vhost(
 
   # Create a proper file close stub.
   file { "${nginx::config::nx_temp_dir}/nginx.d/${name}-699":
-    ensure  => $ensure ? {
-      'absent' => absent,
-      default  => 'file',
-    },
+    ensure  => $ensure_real,
     content => template('nginx/vhost/vhost_footer.erb'),
     notify  => Class['nginx::service'],
   }
@@ -119,18 +119,12 @@ define nginx::resource::vhost(
   # Create SSL File Stubs if SSL is enabled
   if ($ssl == 'true') {
     file { "${nginx::config::nx_temp_dir}/nginx.d/${name}-700-ssl":
-      ensure => $ensure ? {
-        'absent' => absent,
-        default  => 'file',
-      },
+      ensure => $ensure_real,
       content => template('nginx/vhost/vhost_ssl_header.erb'),
       notify => Class['nginx::service'],
     }
     file { "${nginx::config::nx_temp_dir}/nginx.d/${name}-999-ssl":
-      ensure => $ensure ? {
-        'absent' => absent,
-        default  => 'file',
-      },
+      ensure => $ensure_real,
       content => template('nginx/vhost/vhost_footer.erb'),
       notify => Class['nginx::service'],
     }
