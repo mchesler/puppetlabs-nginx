@@ -14,8 +14,9 @@
 #
 # This class file is not called directly
 class nginx::package::redhat {
-  $redhat_packages = ['nginx', 'GeoIP', 'gd', 'libXpm', 'libxslt']
-  package { $redhat_packages:
-    ensure => present,
-  }
+  if ! defined(Package['nginx'])   { package { 'nginx':   ensure => installed } }
+  if ! defined(Package['GeoIP'])   { package { 'GeoIP':   ensure => installed } }
+  if ! defined(Package['gd'])      { package { 'gd':      ensure => installed } }
+  if ! defined(Package['libXpm'])  { package { 'libXpm':  ensure => installed } }
+  if ! defined(Package['libxslt']) { package { 'libxslt': ensure => installed } }
 }
