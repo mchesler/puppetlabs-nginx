@@ -100,6 +100,7 @@ define nginx::resource::vhost(
   nginx::resource::location {"${name}-default":
     ensure             => $ensure,
     vhost              => $name,
+    force_ssl          => $force_ssl,
     ssl                => $ssl,
     location           => '/',
     proxy_read_timeout => $proxy_read_timeout,

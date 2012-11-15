@@ -33,6 +33,7 @@ define nginx::resource::location(
   $index_files        = ['index.html', 'index.htm', 'index.php'],
   $proxy              = undef,
   $proxy_read_timeout = $nginx::params::nx_proxy_read_timeout,
+  $force_ssl          = false,
   $ssl                = false,
   $try_files          = undef,
   $option             = undef,
